@@ -2,8 +2,20 @@ import tkinter as tk
 
 def on_button_click(value):
     if value == "=":
+        calc_result()
+        
+    elif value == "C":
+        text.delete("1.0", tk.END)
+        
+    else:
+        current_text = text.get("1.0", tk.END).strip()  #Obtém o texto atual
+        new_text = current_text + value
+        text.delete("1.0", tk.END)  #Limpa o widget Text
+        text.insert(tk.END, new_text)  #Insere o novo texto
+        
+def calc_result():
         try:
-            # Substitui 'x' por '*' para poder calcular expressões com multiplicação
+            #Substitui texto 'x' por '*'(expressão) para poder calcular
             expression = text.get("1.0", tk.END).strip().replace("x", "*")
             result = eval(expression)
             text.delete("1.0", tk.END)
@@ -12,20 +24,17 @@ def on_button_click(value):
             text.delete("1.0", tk.END)
             text.insert(tk.END, "Erro")
             
-    elif value == "C":
-        text.delete("1.0", tk.END)
-
-    else:
-        current_text = text.get("1.0", tk.END).strip()  # Obtém o texto atual
-        new_text = current_text + value
-        text.delete("1.0", tk.END)  # Limpa o widget Text
-        text.insert(tk.END, new_text)  # Insere o novo texto
+def on_enter(event):
+    calc_result()
+    return "break"
     
 root = tk.Tk()
 root.title("Calculadora")
 
 text = tk.Text(root, height=1.4, width=10, font=("Arial", 52))
 text.pack(pady=10)
+
+text.bind("<Return>", on_enter)
 
 frame = tk.Frame(root)
 frame.pack(padx=10, pady=10)

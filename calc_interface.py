@@ -1,10 +1,25 @@
 import tkinter as tk
 
-def on_button_click(number):
-    current_text = text.get("1.0", tk.END).strip()  # Obtém o texto atual, removendo espaços em branco no final
-    new_text = current_text + number
-    text.delete("1.0", tk.END)  # Limpa o widget Text
-    text.insert(tk.END, new_text)  # Insere o novo texto
+def on_button_click(value):
+    if value == "=":
+        try:
+            # Substitui 'x' por '*' para poder calcular expressões com multiplicação
+            expression = text.get("1.0", tk.END).strip().replace("x", "*")
+            result = eval(expression)
+            text.delete("1.0", tk.END)
+            text.insert(tk.END, str(result))
+        except Exception as e:
+            text.delete("1.0", tk.END)
+            text.insert(tk.END, "Erro")
+            
+    elif value == "C":
+        text.delete("1.0", tk.END)
+
+    else:
+        current_text = text.get("1.0", tk.END).strip()  # Obtém o texto atual
+        new_text = current_text + value
+        text.delete("1.0", tk.END)  # Limpa o widget Text
+        text.insert(tk.END, new_text)  # Insere o novo texto
     
 root = tk.Tk()
 root.title("Calculadora")
@@ -48,7 +63,7 @@ button.grid(row=2, column=3, padx=4, pady=4)
 button = tk.Button(frame, text="=", command=lambda: on_button_click("="), width=5, height=1, font=("Arial", 20))
 button.grid(row=3, column=3, padx=4, pady=4)
 
-button = tk.Button(frame, text="C", command=lambda: on_button_click(""), width=5, height=1, font=("Arial", 20))
+button = tk.Button(frame, text="C", command=lambda: on_button_click("C"), width=5, height=1, font=("Arial", 20))
 button.grid(row=3, column=1, padx=4, pady=4)
 
 button = tk.Button(frame, text="/", command=lambda: on_button_click("/"), width=5, height=1, font=("Arial", 20))
